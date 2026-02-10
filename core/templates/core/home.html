@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Profedemate</title>
+</head>
+<body>
+    <h1>Bienvenido a Profedemate</h1>
+    {% if user.is_authenticated %}
+        <p>Hola, <strong>{{ user.username }}</strong>!</p>
+        <p>Estás logueado.</p>
+
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Cerrar Sesión</button>
+        </form>
+    {% else %}
+        <p>No estás logueado.</p>
+        <a href="{% url 'login' %}">Iniciar Sesión</a>
+        <a href="{% url 'registro' %}">Registrarse</a>
+    {% endif %}
+</body>
+</html>
