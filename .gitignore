@@ -1,0 +1,17 @@
+# .gitignore
+
+# Python y Entorno Virtual
+__pycache__/
+*.py[cod]
+*~
+venv/
+env/
+
+# Base de datos (No queremos subir tus datos de prueba)
+db.sqlite3
+
+# Variables de entorno y seguridad
+.env
+
+# Archivos estáticos recolectados (más adelante lo usaremos)
+staticfiles/
