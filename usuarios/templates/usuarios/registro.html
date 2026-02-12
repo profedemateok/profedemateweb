@@ -1,16 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - Profedemate</title>
-</head>
-<body>
-    <h2>Registrate en Profedemate</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Registrarse</button>
-    </form>
-</body>
-</html>
+{% extends 'core/base.html' %}
+
+{% block title %}Crear Cuenta - Profedemate{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body p-5">
+                <h2 class="text-center mb-4">Únete a Profedemate</h2>
+                <p class="text-center text-muted mb-4">Crea tu cuenta para acceder a los cursos y materiales.</p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        {{ form.as_p }}
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">Registrarse</button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-3">
+                    <small class="text-muted">¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión</a></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
