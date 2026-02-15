@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 class Clase(models.Model):
@@ -34,5 +35,19 @@ class CursoClase(models.Model):
 
     def __str__(self):
         return f'{self.curso.titulo} - {self.orden}: {self.clase.titulo}'
+    
+class Inscripcion(models.Model):
+    # Relacionamos al Usuario
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='inscripciones')
+    # Relacionamos al Curso
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name='inscripciones')
+    fecha_compra = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # Esto es clave: Evita que un alumno compre el mismo curso dos veces por accidente
+        unique_together = ('usuario', 'curso') 
+
+    def __str__(self):
+        return f"{self.usuario.username} matriculado en {self.curso.titulo}"
 
     

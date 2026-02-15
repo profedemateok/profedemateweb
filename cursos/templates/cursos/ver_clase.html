@@ -1,0 +1,84 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ clase_actual.titulo }} - {{ curso.titulo }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+
+<style>
+    /* Ajustes para que la lista lateral se vea bien y tenga scroll si hay muchas clases */
+    .playlist-container {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+    .clase-activa {
+        background-color: #e9ecef;
+        border-left: 4px solid #0d6efd; /* Borde azul para destacar la clase actual */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3">
+    
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'lista_cursos' %}">Cursos</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'detalle_curso' curso.slug %}">{{ curso.titulo }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Clase {{ clase_orden }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-8 mb-4">
+            
+            <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="{{ clase_actual.video_url }}"></div>
+            
+            <div class="mt-4">
+                <h2 class="fw-bold">{{ clase_orden }}. {{ clase_actual.titulo }}</h2>
+                <p class="text-muted mt-3">{{ clase_actual.descripcion }}</p>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white fw-bold">
+                    Contenido del Curso
+                </div>
+                <div class="list-group list-group-flush playlist-container">
+                    
+                    {% for item in lista_clases %}
+                        <a href="{% url 'ver_clase' curso.slug item.clase.id %}" 
+                           class="list-group-item list-group-item-action py-3 {% if item.clase.id == clase_actual.id %}clase-activa fw-bold{% endif %}">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <div>
+                                    <span class="text-muted me-2">{{ item.orden }}.</span>
+                                    {{ item.clase.titulo }}
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-circle-fill text-primary" viewBox="0 0 16 16">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"/>
+                                </svg>
+                            </div>
+                        </a>
+                    {% endfor %}
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+
+<script>
+    // 4. Inicializar el reproductor cuando la página cargue
+    document.addEventListener('DOMContentLoaded', () => {
+        // Configuramos Plyr para que el YouTube disfrazado no muestre videos relacionados al final
+        const player = new Plyr('#player', {
+            youtube: { noCookie: false, rel: 0, showinfo: 0, iv_load_policy: 3, modestbranding: 1 }
+        });
+    });
+</script>
+{% endblock %}
